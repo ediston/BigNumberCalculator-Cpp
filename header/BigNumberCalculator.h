@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 
+#define DEBUG 0
 using namespace std;
 
 string intToString(long long num){
@@ -11,6 +12,56 @@ string intToString(long long num){
     }
     return str;
 }
+
+// str1 - str2
+string _subtract(string str1, string str2){
+    if(DEBUG) cout << "To subtract " << str1 << "," << str2 << endl;
+    bool resNeg = false;
+    if(str1.length() < str2.length()){  // if str1 is less than str2 in length then just swap and put a minus sign at the end
+        swap(str1, str2);
+        resNeg = true;
+    }else if(str1.length() == str2.length() && str1>str2){
+        swap(str1, str2);
+        resNeg = true;
+    }
+    if(DEBUG) cout << "To subtract with sign " << str1 << "," << str2 << endl;
+    int maxi = max(str1.length(), str2.length());
+    int mini = min(str1.length(), str2.length());
+    int carry = 0, diff;
+    int num1, num2;
+    int i=0;
+    string res = "";
+    while(str2[i]=='0' && str1[i]=='0' && i<mini){
+        res = res + "0";
+        i++;
+    }
+    while(str2[i]=='0' && i<mini){
+        res = res + str1[i];
+        i++;
+    }
+    for(; i<maxi; i++){
+        num1 = 0; num2 = 0;
+        if(i<str1.length()) num1 = (int)str1[i] - 48;
+        if(i<str2.length()) num2 = (int)str2[i] - 48;
+        num1 = num1 + carry;
+        carry = 0;
+        if(num1 < num2) {
+            num1 = 10 + num1;
+            carry = -1;
+        }
+        diff = num1 - num2;
+        res = res + (char)(diff + 48);
+        if(DEBUG) cout << "res = " << res << ", carry" << carry << endl;
+    }
+    reverse(res.begin(), res.end());
+    while(res[0]=='0') res = res.substr(1);
+    if(res == "") return "0";
+    if(resNeg){
+        res = "-" + res;
+    }
+    return res;
+}
+
 string _add(string str1, string str2){
     int maxi = max(str1.length(), str2.length());
     int mini = min(str1.length(), str2.length());
@@ -40,6 +91,18 @@ int multiplyChars(char a, char b){
 }
 
 string multiply(string str1, string str2){
+    bool negSign = false;
+    if(str1[0]=='-' && str2[0]=='-' ){
+        str1 = str1.substr(1);
+        str2 = str2.substr(1);
+        negSign = false;
+    }else if(str1[0]=='-'){
+        str1 = str1.substr(1);
+        negSign = true;
+    }else if(str2[0]=='-'){
+        str2 = str2.substr(1);
+        negSign = true;
+    }
     reverse(str1.begin(), str1.end());
     reverse(str2.begin(), str2.end());
     int maxi = str1.length();
@@ -60,20 +123,50 @@ string multiply(string str1, string str2){
         addStr = zeroStr;
     }
     reverse(res.begin(), res.end());
+    if(negSign) res = "-" + res;
     return res;
 }
 
 string add(string str1, string str2){
-    reverse(str1.begin(), str1.end());
-    reverse(str2.begin(), str2.end());
-    string res = _add(str1, str2);
-    reverse(res.begin(), res.end());
+    string res = "";
+    if(str1[0]!='-' && str2[0]!='-' ){
+        reverse(str1.begin(), str1.end());
+        reverse(str2.begin(), str2.end());
+        res = _add(str1, str2);
+        reverse(res.begin(), res.end());
+    }else if(str1[0]=='-' && str2[0]=='-' ){
+        str1 = str1.substr(1);
+        str2 = str2.substr(1);
+        reverse(str1.begin(), str1.end());
+        reverse(str2.begin(), str2.end());
+        res = _add(str1, str2);
+        reverse(res.begin(), res.end());
+        res = "-" + res;
+    }else if(str1[0]=='-'){
+        str1 = str1.substr(1);
+        reverse(str1.begin(), str1.end());
+        reverse(str2.begin(), str2.end());
+        res = _subtract(str2, str1);
+    }else if(str2[0]=='-'){
+        str2 = str2.substr(1);
+        reverse(str1.begin(), str1.end());
+        reverse(str2.begin(), str2.end());
+        res = _subtract(str1, str2);
+    }
     return res;
+}
+
+string subtract(string str1, string str2){
+    if(str2[0]=='-')
+        str2 = str2.substr(1);
+    else
+        str2 = "-" + str2;
+    return add(str1, str2);
 }
 
 string fact(long long num){
     if(num<0){
-        cout << "Invalid number for factorial: " << num << endl;
+        if(DEBUG) cout << "Invalid number for factorial: " << num << endl;
         return "";
     }
     long long n = 1;
