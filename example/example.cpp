@@ -2,10 +2,12 @@
 
 int main() {
     //Add
-    cout << add("23535345345345353543543454353345", "399353453453455345355435345") << endl;
+    cout << "Addition:  " << add("19", "-22") << endl;
+    //Subtract
+    cout << "Subtract:  " << subtract("122", "119") << endl;
     // Multiply
-    cout << multiply("988", "3674") << endl;
+    cout << "Multiply:  " << multiply("98", "-13") << endl;
     //103!
-    cout << fact(103) << endl;
+    cout << "Factorial: "<< fact(103) << endl;
     return 0;
 }
