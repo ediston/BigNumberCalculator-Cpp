@@ -33,12 +33,13 @@ bool aBiggerThanB(string a, string b){
 }
 
 
-string intToString(long long num){
-    string str= "";
+string str= ""; bool negSign = (num < 0);
+    if(num < 0) num = -num ;
     while(num){
         str =  (char)((num%10) + 48) + str;
         num = num/10;
     }
+    if(negSign) str = "-" + str;
     return str;
 }
 
