@@ -35,16 +35,14 @@ bool aBiggerThanB(string a, string b){
 string intToString(long long num){
     string str= ""; bool negSign = (num < 0);
     if(num < 0) num = -num ;
+    if(num==0) return "0";
     while(num){
         str =  (char)((num%10) + 48) + str;
         num = num/10;
     }
-    while(str.length() > 1 && str[0] == '0'){
-        str = str.substr(1);
-    }
-    if(negSign && str[0] != '0') str = "-" + str;
+    if(negSign) str = "-" + str;
     return str;
-}
+
 
 // str1 - str2
 string _subtract(string str1, string str2){
