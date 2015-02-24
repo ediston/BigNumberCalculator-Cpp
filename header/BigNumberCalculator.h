@@ -84,7 +84,7 @@ string _subtract(string str1, string str2){
         if(DEBUG) cout << "res = " << res << ", carry" << carry << endl;
     }
     reverse(res.begin(), res.end());
-    while(res[0]=='0') res = res.substr(1);
+    while(res.length() > 0 && res[0]=='0') res = res.substr(1);
     if(res == "") return "0";
     if(resNeg){
         res = "-" + res;
@@ -153,6 +153,8 @@ string multiply(string str1, string str2){
         addStr = zeroStr;
     }
     reverse(res.begin(), res.end());
+    while(res.length() > 0 && res[0]=='0') res = res.substr(1);
+    if(res == "") return "0";
     if(negSign) res = "-" + res;
     return res;
 }
