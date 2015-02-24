@@ -4,6 +4,35 @@
 #define DEBUG 0
 using namespace std;
 
+bool aBiggerThanB(string a, string b){
+    bool ans = true;
+    if(a[0] == b[0]){
+        if(a[0] == '-'){
+            ans = false;        // reverse answer
+            a = a.substr(1);
+            b = b.substr(1);
+        }
+    }else{
+        if(a[0] == '-'){    // a negative b positive
+            return false;
+        }
+        if(b[0] == '-'){    // a pos b neg
+            return true;
+        }
+    }
+    if(a.size()!=b.size()){
+        if(a.size() > b.size()) return ans;
+        return !ans;
+    }
+    for(int i=0; i<a.size(); i++){
+        if(a[i]==b[i]) continue;
+        if((int)a[i]<(int)b[i]) return !ans;
+        return ans;
+    }
+    return ans;
+}
+
+
 string intToString(long long num){
     string str= "";
     while(num){
